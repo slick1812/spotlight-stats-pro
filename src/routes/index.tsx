@@ -222,73 +222,109 @@ function MetricsTicker() {
 }
 
 function VideoShowcase() {
-  const [activeId, setActiveId] = useState<string>(profile.videos[0].id);
-  const active = profile.videos.find((v) => v.id === activeId) ?? profile.videos[0];
+  const categories = profile.videoCategories;
+  const [activeId, setActiveId] = useState<string>(categories[0].id);
+  const active = categories.find((c) => c.id === activeId) ?? categories[0];
 
   return (
     <section id="film" className="border-b border-border/60">
       <div className="mx-auto max-w-7xl px-6 py-16 lg:py-20">
-        <div className="mb-10 flex items-end justify-between">
+        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="font-display text-sm font-semibold uppercase tracking-[0.3em] text-accent-blue">
               Film Room
             </p>
             <h2 className="mt-2 font-display text-3xl font-bold uppercase sm:text-4xl">
-              Video Showcase
+              Video Library
             </h2>
+            <p className="mt-3 max-w-xl text-sm text-muted-foreground">
+              Filter by skill. Each clip includes a scouting note describing exactly what to evaluate.
+            </p>
+          </div>
+          <div className="text-xs text-muted-foreground tabular">
+            {categories.reduce((n, c) => n + c.videos.length, 0)} clips ·{" "}
+            {categories.length} categories
           </div>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[1fr_280px]">
-          <div className="relative overflow-hidden rounded-sm border border-border bg-black">
-            <video
-              key={active.src}
-              src={active.src}
-              controls
-              playsInline
-              className="aspect-video w-full bg-black"
-            />
-            <div className="border-t border-border bg-surface p-5">
-              <p className="font-display text-lg font-semibold uppercase tracking-wide">
-                {active.label}
-              </p>
-              <p className="mt-1 text-sm text-muted-foreground">{active.description}</p>
-            </div>
-          </div>
+        {/* Category tabs */}
+        <div
+          role="tablist"
+          aria-label="Video categories"
+          className="mb-8 flex flex-wrap gap-2 border-b border-border pb-4"
+        >
+          {categories.map((c) => {
+            const isActive = c.id === activeId;
+            return (
+              <button
+                key={c.id}
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setActiveId(c.id)}
+                className={`rounded-sm border px-4 py-2 font-display text-xs font-semibold uppercase tracking-widest transition ${
+                  isActive
+                    ? "border-accent-blue bg-accent-blue text-primary-foreground"
+                    : "border-border bg-surface text-muted-foreground hover:border-accent-blue/60 hover:text-foreground"
+                }`}
+              >
+                {c.label}
+                <span className="ml-2 tabular text-[0.65rem] opacity-70">
+                  {c.videos.length}
+                </span>
+              </button>
+            );
+          })}
+        </div>
 
-          <div className="flex flex-col gap-2">
-            {profile.videos.map((v) => {
-              const isActive = v.id === activeId;
-              return (
-                <button
-                  key={v.id}
-                  onClick={() => setActiveId(v.id)}
-                  className={`group flex items-center justify-between rounded-sm border p-4 text-left transition ${
-                    isActive
-                      ? "border-accent-blue bg-accent-blue/10"
-                      : "border-border bg-surface hover:border-accent-blue/50"
-                  }`}
-                >
+        {/* Active category */}
+        <div className="mb-6 flex items-center gap-3">
+          <span className="h-1.5 w-1.5 rounded-full bg-accent-blue" />
+          <h3 className="font-display text-lg font-semibold uppercase tracking-wide">
+            {active.label}
+          </h3>
+          <span className="h-px flex-1 bg-border" />
+          <span className="text-xs text-muted-foreground">{active.blurb}</span>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          {active.videos.map((v, i) => (
+            <div
+              key={`${active.id}-${i}`}
+              className="overflow-hidden rounded-sm border border-border bg-surface"
+            >
+              <div className="relative bg-black">
+                <video
+                  key={v.src + i}
+                  src={v.src}
+                  controls
+                  playsInline
+                  preload="metadata"
+                  className="aspect-video w-full bg-black"
+                />
+              </div>
+              <div className="border-t border-border p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <p className="font-display text-base font-semibold uppercase tracking-wide">
+                    {v.title}
+                  </p>
+                  <span className="shrink-0 rounded-sm border border-border px-2 py-0.5 font-display text-[0.6rem] uppercase tracking-widest text-muted-foreground tabular">
+                    {v.date}
+                  </span>
+                </div>
+                <div className="mt-3 flex items-start gap-2 rounded-sm border border-accent-blue/30 bg-accent-blue/5 p-3">
+                  <Target className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent-blue" />
                   <div>
-                    <p
-                      className={`font-display text-sm font-semibold uppercase tracking-wider ${
-                        isActive ? "text-accent-blue" : "text-foreground"
-                      }`}
-                    >
-                      {v.label}
+                    <p className="font-display text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-accent-blue">
+                      Scout Evaluates
                     </p>
-                    <p className="mt-1 text-xs text-muted-foreground">{v.description}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                      {v.evaluating}
+                    </p>
                   </div>
-                  <Play
-                    className={`h-4 w-4 flex-shrink-0 ${
-                      isActive ? "text-accent-blue" : "text-muted-foreground"
-                    }`}
-                    fill={isActive ? "currentColor" : "none"}
-                  />
-                </button>
-              );
-            })}
-          </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
