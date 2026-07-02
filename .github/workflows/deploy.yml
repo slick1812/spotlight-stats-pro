@@ -1,4 +1,4 @@
-name: Deploy Static Content to Pages
+name: Deploy TanStack Start to GitHub Pages
 
 on:
   push:
@@ -15,31 +15,28 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
 
-      - name: Install dependencies
+      - name: Install Project Dependencies
         run: npm install
 
-      - name: Build project
-        run: npm run build
+      - name: Static Compile for GitHub Pages
+        run: npx vinxi build
 
-      - name: Upload artifact
+      - name: Upload Static Web Files
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: './.output/public'
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy Live to Pages
         id: deployment
         uses: actions/deploy-pages@v4
