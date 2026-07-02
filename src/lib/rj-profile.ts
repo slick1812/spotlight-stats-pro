@@ -36,27 +36,142 @@ export const profile = {
       verifiedBy: "Verified by Dominican Academy",
     },
   ],
-  videos: [
+  videoCategories: [
     {
       id: "highlight",
       label: "Highlight Reel",
-      description: "2026 Spring Showcase — full-game highlights",
-      src: "https://cdn.coverr.co/videos/coverr-baseball-in-the-park-4419/1080p.mp4",
-      poster: "",
+      blurb: "Best all-around plays from recent events.",
+      videos: [
+        {
+          title: "2026 Spring Showcase — Full Highlights",
+          date: "Apr 2026",
+          src: "https://cdn.coverr.co/videos/coverr-baseball-in-the-park-4419/1080p.mp4",
+          evaluating: "Overall game IQ, athleticism, and multi-position versatility.",
+        },
+        {
+          title: "ASL All-Star Weekend Highlights",
+          date: "Jun 2026",
+          src: "https://cdn.coverr.co/videos/coverr-a-baseball-game-1584/1080p.mp4",
+          evaluating: "Performance vs elite 14U competition — both sides of the ball.",
+        },
+      ],
     },
     {
       id: "catching",
       label: "Catching",
-      description: "Blocking, framing, and pop time drills",
-      src: "https://cdn.coverr.co/videos/coverr-a-baseball-game-1584/1080p.mp4",
-      poster: "",
+      blurb: "Full behind-the-plate reels.",
+      videos: [
+        {
+          title: "Behind the Plate — Full Inning",
+          date: "May 2026",
+          src: "https://cdn.coverr.co/videos/coverr-a-baseball-game-1584/1080p.mp4",
+          evaluating: "Game management, tempo, and pitcher rapport across a live inning.",
+        },
+      ],
+    },
+    {
+      id: "receiving",
+      label: "Receiving",
+      blurb: "Framing and glove work.",
+      videos: [
+        {
+          title: "Framing Session — Low & Away",
+          date: "May 2026",
+          src: "https://cdn.coverr.co/videos/coverr-a-baseball-game-1584/1080p.mp4",
+          evaluating: "Quiet hands, strike stealing on the corners, presentation to the umpire.",
+        },
+      ],
+    },
+    {
+      id: "blocking",
+      label: "Blocking",
+      blurb: "Ball-in-dirt reps.",
+      videos: [
+        {
+          title: "Blocking Drill — Angle Recovery",
+          date: "Apr 2026",
+          src: "https://cdn.coverr.co/videos/coverr-a-baseball-game-1584/1080p.mp4",
+          evaluating: "First-move quickness, chest angle, and ball containment out front.",
+        },
+      ],
+    },
+    {
+      id: "throwing",
+      label: "Throwing",
+      blurb: "Pop times and throw-downs.",
+      videos: [
+        {
+          title: "Pop Time Session — 1.94 avg",
+          date: "Apr 2026",
+          src: "https://cdn.coverr.co/videos/coverr-a-baseball-game-1584/1080p.mp4",
+          evaluating: "Transfer efficiency, footwork, arm slot, and carry to the bag.",
+        },
+      ],
     },
     {
       id: "hitting",
       label: "Hitting",
-      description: "Cage work and live BP — May 2026",
-      src: "https://cdn.coverr.co/videos/coverr-a-batter-hitting-a-baseball-8449/1080p.mp4",
-      poster: "",
+      blurb: "In-game at-bats.",
+      videos: [
+        {
+          title: "In-Game At-Bats — Spring Showcase",
+          date: "Apr 2026",
+          src: "https://cdn.coverr.co/videos/coverr-a-batter-hitting-a-baseball-8449/1080p.mp4",
+          evaluating: "Approach, pitch recognition, and barrel accuracy vs live pitching.",
+        },
+      ],
+    },
+    {
+      id: "infield",
+      label: "Infield",
+      blurb: "Shortstop reps.",
+      videos: [
+        {
+          title: "SS Workout — Range & Footwork",
+          date: "Mar 2026",
+          src: "https://cdn.coverr.co/videos/coverr-baseball-in-the-park-4419/1080p.mp4",
+          evaluating: "Range, hand quickness, exchange, and throwing accuracy across the diamond.",
+        },
+      ],
+    },
+    {
+      id: "full-games",
+      label: "Full Games",
+      blurb: "Unedited game film.",
+      videos: [
+        {
+          title: "Full Game — Caribbean Invitational",
+          date: "May 2026",
+          src: "https://cdn.coverr.co/videos/coverr-a-baseball-game-1584/1080p.mp4",
+          evaluating: "Unedited game context — decision making, effort, and consistency across nine innings.",
+        },
+      ],
+    },
+    {
+      id: "bullpen",
+      label: "Bullpen Sessions",
+      blurb: "Catching bullpens.",
+      videos: [
+        {
+          title: "Bullpen Catch — Mixed Pitch Types",
+          date: "Feb 2026",
+          src: "https://cdn.coverr.co/videos/coverr-a-baseball-game-1584/1080p.mp4",
+          evaluating: "Sequencing, target discipline, and handling of secondary pitches.",
+        },
+      ],
+    },
+    {
+      id: "bp",
+      label: "Batting Practice",
+      blurb: "Cage and on-field BP.",
+      videos: [
+        {
+          title: "On-Field BP — Opposite Field Focus",
+          date: "May 2026",
+          src: "https://cdn.coverr.co/videos/coverr-a-batter-hitting-a-baseball-8449/1080p.mp4",
+          evaluating: "Swing plane, contact quality, and ability to drive the ball the other way.",
+        },
+      ],
     },
   ],
   milestones: [
