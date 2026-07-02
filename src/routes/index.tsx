@@ -216,7 +216,7 @@ function MetricsTicker() {
 }
 
 function VideoShowcase() {
-  const [activeId, setActiveId] = useState(profile.videos[0].id);
+  const [activeId, setActiveId] = useState<string>(profile.videos[0].id);
   const active = profile.videos.find((v) => v.id === activeId) ?? profile.videos[0];
 
   return (
