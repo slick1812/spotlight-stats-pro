@@ -56,6 +56,7 @@ function Header() {
         <nav className="hidden gap-8 text-sm text-muted-foreground md:flex">
           <a href="#metrics" className="hover:text-foreground transition">Metrics</a>
           <a href="#film" className="hover:text-foreground transition">Film</a>
+          <a href="#stats" className="hover:text-foreground transition">Stats</a>
           <a href="#timeline" className="hover:text-foreground transition">Timeline</a>
           <a href="#contact" className="hover:text-foreground transition">Contact</a>
         </nav>
