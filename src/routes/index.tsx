@@ -30,6 +30,7 @@ function Index() {
         <MetricsTicker />
         <VideoShowcase />
         <Milestones />
+        <Statistics />
         <Footer />
       </main>
       <PrintSheet />
