@@ -86,6 +86,38 @@ export const profile = {
       body: "Transitioned from utility infielder to full-time catcher and secondary shortstop.",
     },
   ],
+  tournaments: [
+    {
+      name: "ASL Summer Classic",
+      dates: "Jun 14–18, 2026",
+      team: "Dominican Academy 14U",
+      gp: 6, pa: 24, ab: 20, h: 9, doubles: 3, triples: 0, hr: 1, rbi: 8, bb: 3, k: 3,
+    },
+    {
+      name: "Caribbean Invitational",
+      dates: "May 22–25, 2026",
+      team: "Dominican Academy 14U",
+      gp: 5, pa: 21, ab: 18, h: 7, doubles: 2, triples: 1, hr: 0, rbi: 5, bb: 2, k: 4,
+    },
+    {
+      name: "Spring Showcase",
+      dates: "Apr 10–13, 2026",
+      team: "Dominican Academy 14U",
+      gp: 4, pa: 17, ab: 15, h: 6, doubles: 1, triples: 0, hr: 1, rbi: 4, bb: 2, k: 3,
+    },
+    {
+      name: "Santo Domingo Cup",
+      dates: "Mar 07–09, 2026",
+      team: "DR Select 14U",
+      gp: 4, pa: 16, ab: 14, h: 5, doubles: 2, triples: 0, hr: 0, rbi: 3, bb: 1, k: 5,
+    },
+    {
+      name: "Winter Prospect Series",
+      dates: "Jan 24–26, 2026",
+      team: "DR Select 14U",
+      gp: 3, pa: 13, ab: 11, h: 4, doubles: 1, triples: 0, hr: 0, rbi: 2, bb: 2, k: 3,
+    },
+  ],
   contacts: {
     parent: {
       role: "Parent",
