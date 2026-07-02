@@ -9,6 +9,7 @@ import {
   MapPin,
   Phone,
   Play,
+  Printer,
   Ruler,
   Target,
   Users,
@@ -22,14 +23,17 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <Header />
-      <Hero />
-      <MetricsTicker />
-      <VideoShowcase />
-      <Milestones />
-      <Footer />
-    </main>
+    <>
+      <main className="min-h-screen bg-background text-foreground print:hidden">
+        <Header />
+        <Hero />
+        <MetricsTicker />
+        <VideoShowcase />
+        <Milestones />
+        <Footer />
+      </main>
+      <PrintSheet />
+    </>
   );
 }
 
@@ -351,13 +355,22 @@ function Footer() {
           <p className="mt-4 text-sm text-muted-foreground sm:text-base">
             A single-page PDF with verified metrics, positional notes, academic summary, and film links.
           </p>
-          <a
-            href={profile.pdfUrl}
-            className="mt-8 inline-flex items-center gap-3 rounded-sm bg-accent-blue px-8 py-4 font-display text-sm font-bold uppercase tracking-widest text-primary-foreground transition hover:bg-accent-blue-glow"
-          >
-            <Download className="h-4 w-4" />
-            Download Recruiter One-Sheet PDF
-          </a>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <button
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-3 rounded-sm bg-accent-blue px-8 py-4 font-display text-sm font-bold uppercase tracking-widest text-primary-foreground transition hover:bg-accent-blue-glow"
+            >
+              <Download className="h-4 w-4" />
+              Download Recruiter One-Sheet PDF
+            </button>
+            <button
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-2 rounded-sm border border-border bg-surface px-5 py-4 font-display text-xs font-semibold uppercase tracking-widest text-foreground transition hover:border-accent-blue"
+            >
+              <Printer className="h-3.5 w-3.5" />
+              Print Preview
+            </button>
+          </div>
         </div>
 
         <div className="mt-16 grid gap-px overflow-hidden rounded-sm border border-border bg-border sm:grid-cols-2">
