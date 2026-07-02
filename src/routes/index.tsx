@@ -362,7 +362,7 @@ function Statistics() {
   );
   const tTotals = calc({ ...totals, name: "", dates: "", team: "" } as Row);
 
-  const headers = [
+  const headers: Array<{ key: string; label: string; align?: "left"; sticky?: boolean }> = [
     { key: "name", label: "Tournament", align: "left", sticky: true },
     { key: "dates", label: "Dates", align: "left" },
     { key: "team", label: "Team", align: "left" },
@@ -380,7 +380,7 @@ function Statistics() {
     { key: "obp", label: "OBP" },
     { key: "slg", label: "SLG" },
     { key: "ops", label: "OPS" },
-  ] as const;
+  ];
 
   return (
     <section id="stats" className="border-b border-border/60">
