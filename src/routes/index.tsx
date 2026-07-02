@@ -334,6 +334,157 @@ function Milestones() {
   );
 }
 
+function Statistics() {
+  type Row = (typeof profile.tournaments)[number];
+  const fmtAvg = (n: number) =>
+    (Number.isFinite(n) ? n : 0).toFixed(3).replace(/^0\./, ".");
+  const calc = (t: Row) => {
+    const singles = t.h - t.doubles - t.triples - t.hr;
+    const tb = singles + 2 * t.doubles + 3 * t.triples + 4 * t.hr;
+    const avg = t.ab ? t.h / t.ab : 0;
+    const obpDen = t.ab + t.bb; // simplified (no HBP/SF tracked)
+    const obp = obpDen ? (t.h + t.bb) / obpDen : 0;
+    const slg = t.ab ? tb / t.ab : 0;
+    return { avg, obp, slg, ops: obp + slg };
+  };
+
+  const totals = profile.tournaments.reduce(
+    (a, t) => ({
+      gp: a.gp + t.gp, pa: a.pa + t.pa, ab: a.ab + t.ab, h: a.h + t.h,
+      doubles: a.doubles + t.doubles, triples: a.triples + t.triples,
+      hr: a.hr + t.hr, rbi: a.rbi + t.rbi, bb: a.bb + t.bb, k: a.k + t.k,
+    }),
+    { gp: 0, pa: 0, ab: 0, h: 0, doubles: 0, triples: 0, hr: 0, rbi: 0, bb: 0, k: 0 },
+  );
+  const tTotals = calc({ ...totals, name: "", dates: "", team: "" } as Row);
+
+  const headers = [
+    { key: "name", label: "Tournament", align: "left", sticky: true },
+    { key: "dates", label: "Dates", align: "left" },
+    { key: "team", label: "Team", align: "left" },
+    { key: "gp", label: "GP" },
+    { key: "pa", label: "PA" },
+    { key: "ab", label: "AB" },
+    { key: "h", label: "H" },
+    { key: "doubles", label: "2B" },
+    { key: "triples", label: "3B" },
+    { key: "hr", label: "HR" },
+    { key: "rbi", label: "RBI" },
+    { key: "bb", label: "BB" },
+    { key: "k", label: "SO" },
+    { key: "avg", label: "AVG" },
+    { key: "obp", label: "OBP" },
+    { key: "slg", label: "SLG" },
+    { key: "ops", label: "OPS" },
+  ] as const;
+
+  return (
+    <section id="stats" className="border-b border-border/60">
+      <div className="mx-auto max-w-7xl px-6 py-16 lg:py-20">
+        <div className="mb-10 flex items-end justify-between">
+          <div>
+            <p className="font-display text-sm font-semibold uppercase tracking-[0.3em] text-accent-blue">
+              By The Numbers
+            </p>
+            <h2 className="mt-2 font-display text-3xl font-bold uppercase sm:text-4xl">
+              Tournament Statistics
+            </h2>
+            <p className="mt-3 max-w-xl text-sm text-muted-foreground">
+              Full offensive splits by tournament. Scroll horizontally to view every column.
+            </p>
+          </div>
+        </div>
+
+        <div className="overflow-hidden rounded-sm border border-border bg-surface">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[1100px] border-collapse text-sm tabular">
+              <thead>
+                <tr className="border-b border-border bg-surface-elevated text-left">
+                  {headers.map((h) => (
+                    <th
+                      key={h.key}
+                      className={`whitespace-nowrap px-4 py-3 font-display text-[0.65rem] font-semibold uppercase tracking-[0.15em] text-muted-foreground ${
+                        h.align === "left" ? "text-left" : "text-right"
+                      } ${h.sticky ? "sticky left-0 z-10 bg-surface-elevated" : ""}`}
+                    >
+                      {h.label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {profile.tournaments.map((t, i) => {
+                  const c = calc(t);
+                  const cells: Array<{ k: string; v: string; num?: boolean }> = [
+                    { k: "name", v: t.name },
+                    { k: "dates", v: t.dates },
+                    { k: "team", v: t.team },
+                    { k: "gp", v: String(t.gp), num: true },
+                    { k: "pa", v: String(t.pa), num: true },
+                    { k: "ab", v: String(t.ab), num: true },
+                    { k: "h", v: String(t.h), num: true },
+                    { k: "doubles", v: String(t.doubles), num: true },
+                    { k: "triples", v: String(t.triples), num: true },
+                    { k: "hr", v: String(t.hr), num: true },
+                    { k: "rbi", v: String(t.rbi), num: true },
+                    { k: "bb", v: String(t.bb), num: true },
+                    { k: "k", v: String(t.k), num: true },
+                    { k: "avg", v: fmtAvg(c.avg), num: true },
+                    { k: "obp", v: fmtAvg(c.obp), num: true },
+                    { k: "slg", v: fmtAvg(c.slg), num: true },
+                    { k: "ops", v: fmtAvg(c.ops), num: true },
+                  ];
+                  return (
+                    <tr
+                      key={i}
+                      className="border-b border-border/60 transition hover:bg-surface-elevated/60"
+                    >
+                      {cells.map((cell, idx) => (
+                        <td
+                          key={cell.k}
+                          className={`whitespace-nowrap px-4 py-3 ${
+                            cell.num ? "text-right" : "text-left"
+                          } ${idx === 0 ? "sticky left-0 z-10 bg-surface font-display text-sm font-semibold uppercase tracking-wide" : ""} ${
+                            cell.k === "ops" ? "font-semibold text-accent-blue" : "text-foreground"
+                          }`}
+                        >
+                          {cell.v}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+              <tfoot>
+                <tr className="border-t-2 border-accent-blue/40 bg-surface-elevated">
+                  <td className="sticky left-0 z-10 whitespace-nowrap bg-surface-elevated px-4 py-3 font-display text-xs font-bold uppercase tracking-widest text-accent-blue">
+                    Totals
+                  </td>
+                  <td className="px-4 py-3" />
+                  <td className="px-4 py-3" />
+                  {[totals.gp, totals.pa, totals.ab, totals.h, totals.doubles, totals.triples, totals.hr, totals.rbi, totals.bb, totals.k].map((n, i) => (
+                    <td key={i} className="whitespace-nowrap px-4 py-3 text-right font-semibold text-foreground">
+                      {n}
+                    </td>
+                  ))}
+                  <td className="whitespace-nowrap px-4 py-3 text-right font-semibold text-foreground">{fmtAvg(tTotals.avg)}</td>
+                  <td className="whitespace-nowrap px-4 py-3 text-right font-semibold text-foreground">{fmtAvg(tTotals.obp)}</td>
+                  <td className="whitespace-nowrap px-4 py-3 text-right font-semibold text-foreground">{fmtAvg(tTotals.slg)}</td>
+                  <td className="whitespace-nowrap px-4 py-3 text-right font-bold text-accent-blue">{fmtAvg(tTotals.ops)}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <p className="mt-4 text-xs text-muted-foreground sm:hidden">
+          Tip: swipe left/right on the table to see all columns.
+        </p>
+      </div>
+    </section>
+  );
+}
+
 function Footer() {
   const { parent, coach } = profile.contacts;
   return (
