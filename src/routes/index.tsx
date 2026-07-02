@@ -9,6 +9,7 @@ import {
   MapPin,
   Phone,
   Play,
+  Printer,
   Ruler,
   Target,
   Users,
@@ -22,14 +23,17 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <Header />
-      <Hero />
-      <MetricsTicker />
-      <VideoShowcase />
-      <Milestones />
-      <Footer />
-    </main>
+    <>
+      <main className="min-h-screen bg-background text-foreground print:hidden">
+        <Header />
+        <Hero />
+        <MetricsTicker />
+        <VideoShowcase />
+        <Milestones />
+        <Footer />
+      </main>
+      <PrintSheet />
+    </>
   );
 }
 
@@ -351,13 +355,22 @@ function Footer() {
           <p className="mt-4 text-sm text-muted-foreground sm:text-base">
             A single-page PDF with verified metrics, positional notes, academic summary, and film links.
           </p>
-          <a
-            href={profile.pdfUrl}
-            className="mt-8 inline-flex items-center gap-3 rounded-sm bg-accent-blue px-8 py-4 font-display text-sm font-bold uppercase tracking-widest text-primary-foreground transition hover:bg-accent-blue-glow"
-          >
-            <Download className="h-4 w-4" />
-            Download Recruiter One-Sheet PDF
-          </a>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <button
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-3 rounded-sm bg-accent-blue px-8 py-4 font-display text-sm font-bold uppercase tracking-widest text-primary-foreground transition hover:bg-accent-blue-glow"
+            >
+              <Download className="h-4 w-4" />
+              Download Recruiter One-Sheet PDF
+            </button>
+            <button
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-2 rounded-sm border border-border bg-surface px-5 py-4 font-display text-xs font-semibold uppercase tracking-widest text-foreground transition hover:border-accent-blue"
+            >
+              <Printer className="h-3.5 w-3.5" />
+              Print Preview
+            </button>
+          </div>
         </div>
 
         <div className="mt-16 grid gap-px overflow-hidden rounded-sm border border-border bg-border sm:grid-cols-2">
@@ -397,5 +410,293 @@ function Footer() {
         </p>
       </div>
     </section>
+  );
+}
+
+/* -----------------------------------------------------------------------
+ * PRINT SHEET
+ * Hidden on screen. On print (or "Save as PDF"), this is the ONLY thing
+ * that renders — a clean, single-page, black-and-white athletic resume.
+ * -------------------------------------------------------------------- */
+function PrintSheet() {
+  const { bio, contacts, metrics } = profile;
+  const liveUrl = typeof window !== "undefined" ? window.location.href : "https://rjclark.example";
+  const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=0&data=${encodeURIComponent(
+    liveUrl,
+  )}`;
+
+  return (
+    <div
+      className="print-sheet hidden print:block"
+      style={{
+        color: "#000",
+        background: "#fff",
+        fontFamily: "'Inter', system-ui, sans-serif",
+        fontSize: "10pt",
+        lineHeight: 1.35,
+      }}
+    >
+      {/* HEADER */}
+      <header
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+          borderBottom: "2px solid #000",
+          paddingBottom: "8pt",
+          marginBottom: "12pt",
+        }}
+      >
+        <div>
+          <p
+            style={{
+              fontSize: "8pt",
+              letterSpacing: "0.25em",
+              textTransform: "uppercase",
+              margin: 0,
+            }}
+          >
+            Recruiter One-Sheet · {profile.classYear}
+          </p>
+          <h1
+            style={{
+              fontFamily: "'Oswald', 'Inter', sans-serif",
+              fontSize: "26pt",
+              fontWeight: 700,
+              textTransform: "uppercase",
+              margin: "4pt 0 0",
+              letterSpacing: "-0.01em",
+              lineHeight: 1,
+            }}
+          >
+            {profile.fullName}
+          </h1>
+          <p
+            style={{
+              fontSize: "10pt",
+              textTransform: "uppercase",
+              letterSpacing: "0.18em",
+              margin: "4pt 0 0",
+            }}
+          >
+            “{profile.nickname}” · {bio.positions}
+          </p>
+        </div>
+        <div style={{ textAlign: "right", fontSize: "8pt" }}>
+          <p style={{ margin: 0, fontWeight: 600 }}>Profile ID</p>
+          <p style={{ margin: 0, fontVariantNumeric: "tabular-nums" }}>DR-2029-0742</p>
+          <p style={{ margin: "6pt 0 0", fontWeight: 600 }}>Generated</p>
+          <p style={{ margin: 0, fontVariantNumeric: "tabular-nums" }}>
+            {new Date().toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </p>
+        </div>
+      </header>
+
+      {/* BODY: photo + bio */}
+      <section
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1.4in 1fr",
+          gap: "14pt",
+          marginBottom: "12pt",
+        }}
+      >
+        <img
+          src={profile.heroImage}
+          alt={profile.fullName}
+          style={{
+            width: "1.4in",
+            height: "1.75in",
+            objectFit: "cover",
+            border: "1px solid #000",
+            filter: "grayscale(100%) contrast(1.05)",
+          }}
+        />
+        <div>
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              fontSize: "9pt",
+              fontVariantNumeric: "tabular-nums lining-nums",
+            }}
+          >
+            <tbody>
+              {[
+                ["Height", bio.height],
+                ["Weight", bio.weight],
+                ["Positions", bio.positions],
+                ["Bats / Throws", bio.batsThrows],
+                ["Location", bio.location],
+                ["Age", bio.age],
+              ].map(([k, v]) => (
+                <tr key={k} style={{ borderBottom: "1px solid #999" }}>
+                  <td
+                    style={{
+                      padding: "4pt 8pt 4pt 0",
+                      fontSize: "7.5pt",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.15em",
+                      fontWeight: 600,
+                      width: "35%",
+                    }}
+                  >
+                    {k}
+                  </td>
+                  <td style={{ padding: "4pt 0", fontWeight: 500 }}>{v}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* METRICS */}
+      <section style={{ marginBottom: "12pt" }}>
+        <h2
+          style={{
+            fontFamily: "'Oswald', 'Inter', sans-serif",
+            fontSize: "10pt",
+            textTransform: "uppercase",
+            letterSpacing: "0.25em",
+            borderBottom: "1px solid #000",
+            paddingBottom: "3pt",
+            margin: "0 0 8pt",
+          }}
+        >
+          Verified Metrics
+        </h2>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(${metrics.length}, 1fr)`,
+            gap: "8pt",
+          }}
+        >
+          {metrics.map((m) => (
+            <div
+              key={m.label}
+              style={{
+                border: "1px solid #000",
+                padding: "8pt",
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "7pt",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.2em",
+                  fontWeight: 600,
+                }}
+              >
+                {m.label}
+              </p>
+              <p
+                style={{
+                  margin: "4pt 0 0",
+                  fontFamily: "'Oswald', 'Inter', sans-serif",
+                  fontSize: "22pt",
+                  fontWeight: 700,
+                  lineHeight: 1,
+                  fontVariantNumeric: "tabular-nums lining-nums",
+                }}
+              >
+                {m.value}
+                <span style={{ fontSize: "10pt", marginLeft: "4pt" }}>{m.unit}</span>
+              </p>
+              <p style={{ margin: "4pt 0 0", fontSize: "7.5pt" }}>{m.date}</p>
+              <p style={{ margin: "1pt 0 0", fontSize: "7.5pt", fontStyle: "italic" }}>
+                {m.verifiedBy}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FOOTER: coach + QR */}
+      <section
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1in",
+          gap: "14pt",
+          borderTop: "2px solid #000",
+          paddingTop: "8pt",
+        }}
+      >
+        <div>
+          <h2
+            style={{
+              fontFamily: "'Oswald', 'Inter', sans-serif",
+              fontSize: "9pt",
+              textTransform: "uppercase",
+              letterSpacing: "0.25em",
+              margin: "0 0 6pt",
+            }}
+          >
+            Primary Coach Contact
+          </h2>
+          <p style={{ margin: 0, fontWeight: 700, fontSize: "11pt" }}>
+            {contacts.coach.name}
+          </p>
+          <p style={{ margin: "1pt 0 0", fontSize: "9pt" }}>{contacts.coach.role}</p>
+          <p style={{ margin: "4pt 0 0", fontSize: "9pt", fontVariantNumeric: "tabular-nums" }}>
+            {contacts.coach.phone} · {contacts.coach.email}
+          </p>
+
+          <h2
+            style={{
+              fontFamily: "'Oswald', 'Inter', sans-serif",
+              fontSize: "9pt",
+              textTransform: "uppercase",
+              letterSpacing: "0.25em",
+              margin: "10pt 0 6pt",
+            }}
+          >
+            Parent / Guardian
+          </h2>
+          <p style={{ margin: 0, fontWeight: 700, fontSize: "10pt" }}>
+            {contacts.parent.name}
+          </p>
+          <p style={{ margin: "1pt 0 0", fontSize: "9pt", fontVariantNumeric: "tabular-nums" }}>
+            {contacts.parent.phone} · {contacts.parent.email}
+          </p>
+        </div>
+
+        <div style={{ textAlign: "center" }}>
+          <img
+            src={qrSrc}
+            alt="QR code linking to live profile"
+            width={90}
+            height={90}
+            style={{
+              width: "1in",
+              height: "1in",
+              border: "1px solid #000",
+              display: "block",
+            }}
+            onError={(e) => {
+              // If offline, hide the img and rely on the placeholder box
+              (e.currentTarget as HTMLImageElement).style.visibility = "hidden";
+            }}
+          />
+          <p
+            style={{
+              margin: "4pt 0 0",
+              fontSize: "6.5pt",
+              textTransform: "uppercase",
+              letterSpacing: "0.15em",
+              fontWeight: 600,
+            }}
+          >
+            Scan for Live Profile
+          </p>
+        </div>
+      </section>
+    </div>
   );
 }

@@ -105,3 +105,26 @@
   font-variant-numeric: tabular-nums lining-nums;
   letter-spacing: -0.02em;
 }
+
+@media print {
+  @page {
+    size: Letter;
+    margin: 0.5in;
+  }
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    color-scheme: light;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  /* Belt-and-suspenders: strip color from every screen element in case
+     the print:hidden utility misses something. The dedicated print sheet
+     applies its own inline B&W styling and isn't affected. */
+  body :not(.print-sheet, .print-sheet *) {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+}
+
