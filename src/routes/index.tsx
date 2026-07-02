@@ -335,7 +335,11 @@ function Milestones() {
 }
 
 function Statistics() {
-  type Row = (typeof profile.tournaments)[number];
+  type Row = {
+    name: string; dates: string; team: string;
+    gp: number; pa: number; ab: number; h: number;
+    doubles: number; triples: number; hr: number; rbi: number; bb: number; k: number;
+  };
   const fmtAvg = (n: number) =>
     (Number.isFinite(n) ? n : 0).toFixed(3).replace(/^0\./, ".");
   const calc = (t: Row) => {
