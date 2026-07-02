@@ -77,14 +77,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "RJ Clark Jr. | Class of 2029 — Catcher / Shortstop" },
+      { name: "description", content: "Recruiting portfolio for Daniel Ray Clark Jr. (RJ) — Class of 2029 catcher and shortstop. Verified metrics, video, and milestones." },
+      { name: "author", content: "RJ Clark Jr." },
+      { property: "og:title", content: "RJ Clark Jr. | Class of 2029" },
+      { property: "og:description", content: "Verified metrics, film, and milestones for Class of 2029 catcher/shortstop RJ Clark Jr." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
